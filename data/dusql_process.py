@@ -170,7 +170,6 @@ if __name__ == "__main__":
     data = DusqlDataSet(home_path, translation_model_path)
     new_schema = data.trans_schema()
     with open(os.path.join(home_path, "new_schema.jsonl"), "w", encoding = "utf-8")as f:
-        # json.dump(new_schema,f,ensure_ascii=False)
         for n in new_schema:
             f.write(json.dumps(n) + '\n')
     result = data.get_sqlite()
