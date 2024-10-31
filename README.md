@@ -39,8 +39,8 @@ python3 dusql_process.py
 
 - 单机四卡训练
 ```shell
-CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed --master_port 5545 train.py --train_path data/train.json  \
-                                                                   --test_path data/test.json  \
+CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed --master_port 5545 train_qwen.py --train_path /root/autodl-fs/DuSQL/llm_train_zh.json  \
+                                                                   --test_path /root/autodl-fs/DuSQL/llm_dev_zh.json  \
                                                                    --model_name_or_path /root/autodl-fs/Qwen-1_8B-Chat/  \
                                                                    --per_device_train_batch_size 2  \
                                                                    --max_len 2048  \
@@ -56,9 +56,9 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed --master_port 5545 train.py --train_path 
                                                                    --lora_alpha 64  \
                                                                    --save_model_step 100  \
                                                                    --lora_dropout 0.1  \
-                                                                   --output_dir ./output_dir_qlora  \
+                                                                   --output_dir /root/autodl-tmp/output_dir_qlora  \
                                                                    --gradient_checkpointing  \
-                                                                   --ds_file ds_zero2_no_offload.json  \
+                                                                   --ds_file default_offload_opt_param.json  \
                                                                    --is_skip
 ```
 
