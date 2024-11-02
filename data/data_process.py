@@ -232,8 +232,8 @@ if __name__ == "__main__":
     home_path = "/root/autodl-fs/DuSQL/"
     translation_model_path = "/root/autodl-fs/opus-mt-zh-en"
     tokenizer_path = "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct"
-    data = DusqlDataSet(home_path, translation_model_path)
-    new_schema = data.trans_schema()
+    # data = DusqlDataSet(home_path, translation_model_path)
+    # new_schema = data.trans_schema()
     # with open(os.path.join(home_path, "new_schema.jsonl"), "w", encoding = "utf-8")as f:
     #     for n in new_schema:
     #         f.write(json.dumps(n) + '\n')
