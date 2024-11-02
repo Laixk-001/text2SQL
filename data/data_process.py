@@ -174,10 +174,7 @@ def make_llm_data(home_path, file_name, save_name,tokenizer, sqlite_info_name="s
             assert len(input_id) == len(target), "Input and target lengths do not match."
 
             input_role_user = '<|im_start|>user'
-            sentence_input_user = f'### Input:
-Generate a SQL query that answers the question `{question}`.
-This query will run on a database whose schema is represented in this string:
-{sqlite_query}'
+            sentence_input_user = f'### Input:\nGenerate a SQL query that answers the question `{question}`.\nThis query will run on a database whose schema is represented in this string:\n{sqlite_query}'
             _input_id = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_user, add_special_tokens=False).input_ids + [im_end] + nl_tokens
             input_id += _input_id
             test_input_ids += _input_id
@@ -186,9 +183,7 @@ This query will run on a database whose schema is represented in this string:
             target += _target
 
             input_role_assistant = '<|im_start|>assistant'
-            sentence_input_assistant = f'### Response:
-Based on your instructions, here is the SQL query I have generated to answer the question `{question}`:
-`{sql_query_zh}`'
+            sentence_input_assistant = f'### Response:\nBased on your instructions, here is the SQL query I have generated to answer the question `{question}`:\n`{sql_query_zh}`'
             _input_id = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_assistant, add_special_tokens=False).input_ids + [im_end] + nl_tokens
             input_id += _input_id
 
