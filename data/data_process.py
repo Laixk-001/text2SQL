@@ -11,7 +11,6 @@ import jsonlines
 import os
 import numpy as np
 import transformers
-import tqdm
 import sys
 from typing import Dict
 import argparse
