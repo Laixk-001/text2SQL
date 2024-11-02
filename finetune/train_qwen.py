@@ -30,6 +30,7 @@ def parse_args():
     parser.add_argument("--test_path",default="",type=str,help="")
     parser.add_argument("--max_len",default="",type=str,help="")
     parser.add_argument("--model_max_length",default=1024,type=int,help="")
+    parser.add_argument("--truncate_source",default=True,type=bool)
     parser.add_argument("--is_skip",action="store_true",help="")
     # 训练配置
     parser.add_argument("--per_device_train_batch_size",default=16,type=int,help="")
