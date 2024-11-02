@@ -44,7 +44,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed --master_port 5545 train_qwen.py --train_
                                                                    --model_name_or_path /root/autodl-fs/Qwen2_5_Coder_7B_Instruct  \
                                                                    --per_device_train_batch_size 2  \
                                                                    --max_len 2048  \
-                                                                   --max_src_len 1560  \
+                                                                   --model_max_len 1560  \
                                                                    --learning_rate 1e-4  \
                                                                    --weight_decay 0.1  \
                                                                    --num_train_epochs 3  \
@@ -59,7 +59,6 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 deepspeed --master_port 5545 train_qwen.py --train_
                                                                    --output_dir /root/autodl-tmp/output_dir_qlora  \
                                                                    --gradient_checkpointing  \
                                                                    --ds_file default_offload_opt_param.json  \
-                                                                   --is_skip
 ```
 
 ## 模型推理
