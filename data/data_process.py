@@ -17,7 +17,6 @@ from typing import Dict
 import argparse
 import itertools
 import json
-from utils import utils
 
 """
 DuSQL数据库信息:
