@@ -13,9 +13,9 @@ DATA_PATH=${1}
 PRETRAINED_MODEL=${2}
 OUTPUT_DIR=${3}
 
-DATA_PATH=${DATA_PATH:-"/path/to/processed/sft.jsonl"}
-PRETRAINED_MODEL=${PRETRAINED_MODEL:-"/path/to/pretrained_models/Qwen/Qwen2___5-Coder-1___5B/"}
-OUTPUT_DIR=${OUTPUT_DIR:-"/path/to/checkpoints/lr${LR}-wr${WARMUP_STEPS}-wd${WEIGHT_DECAY}-bsz${BATCH_SIZE}-maxlen${MAX_LENGTH}/"}
+DATA_PATH=${DATA_PATH:-"/root/autodl-fs/DuSQL/text2sql_train_zh.json"}
+PRETRAINED_MODEL=${PRETRAINED_MODEL:-"/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/"}
+OUTPUT_DIR=${OUTPUT_DIR:-"/root/autodl-tmp/output_dir_qlora/lr${LR}-wr${WARMUP_STEPS}-wd${WEIGHT_DECAY}-bsz${BATCH_SIZE}-maxlen${MAX_LENGTH}/"}
 
 GPUS_PER_NODE=$(python -c "import torch; print(torch.cuda.device_count());")
 MASTER_ADDR=${MASTER_ADDR:-localhost}
@@ -30,7 +30,7 @@ DISTRIBUTED_ARGS="
     --master_addr $MASTER_ADDR \
     --master_port $MASTER_PORT
 "
-DEEPSPEED_CONFIG="./configs/default_offload_opt_param.json"
+DEEPSPEED_CONFIG="./default_offload_opt_param.json  "
 BATCH_SIZE=1024
 MICRO_BATCH_SIZE=4
 GRAD_ACCU=$(($BATCH_SIZE / $WORLD_SIZE / $MICRO_BATCH_SIZE))
