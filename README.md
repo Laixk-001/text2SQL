@@ -38,6 +38,11 @@ python3 dusql_process.py
 模型训练需要运行train.py文件，会自动生成output_dir文件夹，存放每个save_model_step保存的模型文件。
 
 - 单机四卡训练
+需要进到源码内：/root/miniconda3/envs/text2sql/lib/python3.10/site-packages/deepspeed/ops/op_builder
+修改builder.py文件：
+  if sys_cuda_version != torch_cuda_version:
+    return True
+
 ```shell
 CUDA_VISIBLE_DEVICES=0,1 deepspeed --master_port 5545 train_qwen.py --train_path /root/autodl-fs/DuSQL/text2sql_train_zh.json  \
                                                                    --test_path /root/autodl-fs/DuSQL/text2sql_dev_zh.json  \
