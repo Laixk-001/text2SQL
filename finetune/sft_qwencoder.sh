@@ -46,7 +46,7 @@ echo "Pretrained Model" ${PRETRAINED_MODEL}
 echo "WORLD_SIZE" $WORLD_SIZE "MICRO BATCH SIZE" $MICRO_BATCH_SIZE "GRAD_ACCU" $GRAD_ACCU
 echo $DISTRIBUTED_ARGS
 
-cd ROOT_PATH="/path/to/sft/";
+# cd ROOT_PATH="/path/to/sft/";
 torchrun ${DISTRIBUTED_ARGS} train.py \
     --model_name_or_path  ${PRETRAINED_MODEL} \
     --data_path $DATA_PATH \
