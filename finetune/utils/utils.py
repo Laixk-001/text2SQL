@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import random
 import transformers
+from dataclasses import dataclass, field
 
 from typing import Dict, Optional, Sequence
 from torch.utils.data import Dataset
@@ -54,6 +55,7 @@ class SupervisedDataset(Dataset):
     def __getitem__(self, i) -> Dict[str, torch.Tensor]:        
         return dict(input_ids=self.input_ids[i], labels=self.labels[i])
 
+@dataclass
 class DataCollatorForSupervisedDataset(object):
     """Collate examples for supervised fine-tuning."""
 
