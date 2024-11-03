@@ -196,11 +196,11 @@ def make_llm_data(home_path, file_name, save_name,tokenizer, sqlite_info_name="s
                 label=target,
             ))
 
-    with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
-        json.dump(objs, fout,ensure_ascii=False)
-
     # with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
-    #     fout.writelines("\n".join([json.dumps(one, ensure_ascii=False) for one in objs]))
+    #     json.dump(objs, fout,ensure_ascii=False)
+
+    with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
+        fout.writelines("\n".join([json.dumps(one, ensure_ascii=False) for one in objs]))
 
     # Set special tokens globally to avoid adding them multiple times.
 def setup_tokenizer(tokenizer):
