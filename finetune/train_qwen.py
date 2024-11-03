@@ -16,6 +16,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 import os
 import logging
 
+deepspeed.ops.op_builder.CPUAdamBuilder().load()
 
 try:
     from torch.utils.tensorboard import SummaryWriter
