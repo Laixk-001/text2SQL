@@ -101,7 +101,7 @@ def train():
                                                 llm_int8_threshold=6.0,
                                                 llm_int8_has_fp16_weight=False,
                                             ),
-                                            torch_dtype=torch.bfloat16,
+                                            torch_dtype=model_config.torch_dtype,
                                             device_map=device_map)
     # 以适应后续的低位量化训练，通常会冻结部分参数以减少计算开销
     model = prepare_model_for_kbit_training(model)
