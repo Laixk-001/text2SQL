@@ -7,7 +7,7 @@ export NCCL_IB_HCA=mlx5
 export NCCL_IB_TIMEOUT=22
 export NCCL_IB_QPS_PER_CONNECTION=8
 export NCCL_NET_PLUGIN=none
-export PATH=/path/to/miniconda3/envs/qwen/bin:$PATH;
+export PATH=/root/miniconda3/envs/qwen/bin:$PATH;
 
 DATA_PATH=${1}
 PRETRAINED_MODEL=${2}
