@@ -174,19 +174,24 @@ def make_llm_data(home_path, file_name, save_name,tokenizer, sqlite_info_name="s
 
             input_role_user = '<|im_start|>user'
             sentence_input_user = f'### Input:\nGenerate a SQL query that answers the question `{question}`.\nThis query will run on a database whose schema is represented in this string:\n{sqlite_query}'
-            _input_id = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_user, add_special_tokens=False).input_ids + [im_end] + nl_tokens
-            input_id += _input_id
-            test_input_ids += _input_id
+            # _input_id_user = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_user, add_special_tokens=False).input_ids + [im_end] + nl_tokens
+            _input_id_user = [im_start] + _user + tokenizer(sentence_input_user, add_special_tokens=False).input_ids + [im_end] + nl_tokens
+            input_id += _input_id_user
+            test_input_ids += _input_id_user
 
-            _target = [im_start] + [IGNORE_INDEX] * (len(_input_id) - 3) + [im_end] + nl_tokens
+            _target = [im_start] + [IGNORE_INDEX] * (len(_input_id_user) - 3) + [im_end] + nl_tokens
             target += _target
 
             input_role_assistant = '<|im_start|>assistant'
-            sentence_input_assistant = f'### Response:\nBased on your instructions, here is the SQL query I have generated to answer the question `{question}`:\n`{sql_query_zh}`'
-            _input_id = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_assistant, add_special_tokens=False).input_ids + [im_end] + nl_tokens
-            input_id += _input_id
+            sentence_input_assistant_prompt = f'### Response:\nBased on your instructions, here is the SQL query I have generated to answer the question '
+            sentence_input_assistant_response = f"`{question}`:\n`{sql_query_zh}`"
+            sentence_input_assistant = sentence_input_assistant_prompt + sentence_input_assistant_response
+            # _input_id = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_assistant, add_special_tokens=False).input_ids + [im_end] + nl_tokens
+            _input_id_assistant = [im_start] + _assistant + tokenizer(sentence_input_assistant_prompt, add_special_tokens=False).input_ids + tokenizer(sentence_input_assistant_response, add_special_tokens=False).input_ids + [im_end] + nl_tokens
+            input_id += _input_id_assistant
 
-            _target = [im_start] + [IGNORE_INDEX] * len(tokenizer(input_role_assistant).input_ids) + _input_id[len(tokenizer(input_role_assistant).input_ids) + 1:-2] + [im_end] + nl_tokens
+            # _target = [im_start] + [IGNORE_INDEX] * len(tokenizer(input_role_assistant).input_ids) + _input_id[len(tokenizer(input_role_assistant).input_ids) + 1:-2] + [im_end] + nl_tokens
+            _target = [im_start] + _assistant + tokenizer(sentence_input_assistant_prompt, add_special_tokens=False).input_ids + [IGNORE_INDEX] * len(tokenizer(sentence_input_assistant_response, add_special_tokens=False).input_ids) + [im_end] + nl_tokens
 
             test_input_ids += tokenizer(input_role_assistant).input_ids + nl_tokens
 
