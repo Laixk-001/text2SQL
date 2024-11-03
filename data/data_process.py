@@ -193,7 +193,9 @@ def make_llm_data(home_path, file_name, save_name,tokenizer, sqlite_info_name="s
             # _target = [im_start] + [IGNORE_INDEX] * len(tokenizer(input_role_assistant).input_ids) + _input_id[len(tokenizer(input_role_assistant).input_ids) + 1:-2] + [im_end] + nl_tokens
             _target = [im_start] + _assistant + tokenizer(sentence_input_assistant_prompt, add_special_tokens=False).input_ids + [IGNORE_INDEX] * len(tokenizer(sentence_input_assistant_response, add_special_tokens=False).input_ids) + [im_end] + nl_tokens
 
-            test_input_ids += tokenizer(input_role_assistant).input_ids + nl_tokens
+            target += _target
+
+            test_input_ids += [im_start] + _assistant + tokenizer(sentence_input_assistant_prompt, add_special_tokens=False).input_ids + nl_tokens
 
             objs.append(dict(
                 test_input_ids=test_input_ids,
