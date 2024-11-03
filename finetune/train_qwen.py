@@ -16,7 +16,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 import os
 import logging
 
-deepspeed.ops.op_builder.CPUAdamBuilder().load()
+# deepspeed.ops.op_builder.CPUAdamBuilder().load()
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 
 try:
