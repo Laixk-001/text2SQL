@@ -17,6 +17,7 @@ import os
 import logging
 
 deepspeed.ops.op_builder.CPUAdamBuilder().load()
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 
 try:
     from torch.utils.tensorboard import SummaryWriter
