@@ -27,17 +27,17 @@ except ImportError:
 def parse_args():
     parser = argparse.ArgumentParser()
     # 模型配置
-    parser.add_argument("--model_name_or_path",type=str,help="model name or path",required=True)
+    parser.add_argument("--model_name_or_path",type=str,default="/root/autodl-tmp/model/Qwen2_5_Coder_7B_Instruct",help="model name or path",required=True)
     # 数据配置
-    parser.add_argument("--train_path",default="",type=str,help="")
-    parser.add_argument("--test_path",default="",type=str,help="")
-    parser.add_argument("--max_len",default="",type=str,help="")
+    parser.add_argument("--train_path",default="/root/autodl-tmp/data/text2sql_train_zh.json",type=str,help="")
+    parser.add_argument("--test_path",default="/root/autodl-tmp/data/text2sql_dev_zh.json",type=str,help="")
+    parser.add_argument("--max_len",default=2048,type=int,help="")
     parser.add_argument("--model_max_length",default=1024,type=int,help="")
     parser.add_argument("--truncate_source",default=True,type=bool)
     parser.add_argument("--is_skip",action="store_true",help="")
     # 训练配置
     parser.add_argument("--per_device_train_batch_size",default=16,type=int,help="")
-    parser.add_argument("--learning_rate",default=1e-3,type=float,help="")
+    parser.add_argument("--learning_rate",default=1e-4,type=float,help="")
     parser.add_argument("--weight_decay",default=0.1,type=float,help="")
     parser.add_argument("--num_train_epochs",default=1,type=int,help="")
     parser.add_argument("--gradient_accumulation_steps",default=1,type=int,help="")
