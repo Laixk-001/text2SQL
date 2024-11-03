@@ -2,11 +2,7 @@
     "bf16": {
       "enabled": "auto"
     },
-    "fp16": {
-      "enabled": false,
-      "loss_scale": 0,
-      "loss_scale_window": 100
-    },
+
     "optimizer": {
       "type": "AdamW",
       "params": {
@@ -28,11 +24,11 @@
     "zero_optimization": {
       "stage": 3,
       "offload_optimizer": {
-        "device": "cpu",
+        "device": "auto",
         "pin_memory": true
       },
       "offload_param": {
-        "device": "cpu",
+        "device": "auto",
         "pin_memory": true
       },
       "overlap_comm": true,
