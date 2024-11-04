@@ -209,7 +209,7 @@ def train():
             model.get_input_embeddings().register_forward_hook(make_inputs_require_grad)
     
     # DeepSpeed对模型进行初始化
-    args = argparse.Namespace(**args)
+    args = argparse.Namespace(*args)
     model, optimizer, _ , lr_scheduler = deepspeed.initialize(model=model,args=args, config=ds_config, dist_init_required=True)
     trainer = Trainer(model=model, tokenizer=tokenizer, args=args, **data_module, callbacks=[LoggingCallback])
     trainer.train()
