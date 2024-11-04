@@ -111,12 +111,12 @@ def tokenize_file(workers=64, chunk_size=10000, input_path="./raw/sft.jsonl", ou
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Argument Parser Example')
-    parser.add_argument('--input_path', '-input_path', type=str, default="sft.jsonl", help='Path to input file')
-    parser.add_argument('--output_path', '-output_path', type=str, default="sft.jsonl", help='Path to output file')
+    parser.add_argument('--input_path', '-input_path', type=str, default="/root/autodl-fs/DuSQL/text2sql_dev_text_zh.json", help='Path to input file')
+    parser.add_argument('--output_path', '-output_path', type=str, default="/root/autodl-fs/DuSQL/text2sql_dev_tokenizer_zh.json", help='Path to output file')
     parser.add_argument('--workers', '-workers', type=int, default=1, help='Number of workers')
     parser.add_argument('--chunk_size', '-chunk_size', type=int, default=10240, help='Chunk size for file processing')
     parser.add_argument('--max_len', '-max_len', type=int, default=32768, help='Maximum length for tokenization')
-    parser.add_argument('--tokenizer_path', '-tokenizer_path', type=str, default="Qwen/Qwen2___5-Coder-1___5B/", help='Path to tokenizer')
+    parser.add_argument('--tokenizer_path', '-tokenizer_path', type=str, default="/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/", help='Path to tokenizer')
     return parser.parse_args()
 
 
