@@ -79,7 +79,7 @@ class LoggingCallback(transformers.TrainerCallback):
 def train():
     # 设置模型训练参数
     # args = parse_args()
-    args = dict()
+    # args = dict()
     # args["model_name_or_path"] = "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/"
     # args["train_path"] = "/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json" 
     # args["test_path"] = "/root/autodl-fs/DuSQL/text2sql_dev_tokenizer_zh.json"
@@ -133,7 +133,7 @@ def train():
 
     parser = deepspeed.add_config_arguments(parser)
 
-
+    args = parser.parse_args()
     # 判断是多卡训练还是单卡训练
     if args.local_rank == -1:
         device = torch.device("cuda")
