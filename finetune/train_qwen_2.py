@@ -78,7 +78,30 @@ class LoggingCallback(transformers.TrainerCallback):
 
 def train():
     # 设置模型训练参数
-    args = parse_args()
+    # args = parse_args()
+    args = dict()
+    args["model_name_or_path"] = "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/"
+    args["train_path"] = "/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json" 
+    args["test_path"] = "/root/autodl-fs/DuSQL/text2sql_dev_tokenizer_zh.json"
+    args["max_len"] = 2048
+    args["model_max_length"] = 1024
+    args["truncate_source"] = True
+    args["per_device_train_batch_size"] = 2
+    args["learning_rate"] = 1e-4
+    args["weight_decay"] = 0.1
+    args["num_train_epochs"] = 3
+    args["gradient_accumulation_steps"] =4
+    args["warmup_ratio"] = 0.03
+    args["output_dir"] = "/root/autodl-tmp/output_dir_qlora"
+    args["local_rank"] = -1
+    args["show_loss_step"] = 10
+    args["gradient_checkpointing"] = 'store_true'
+    args["save_model_step"] = 100
+    args["ds_file"] = "default_offload_opt_param.json"
+    args["lora_dim"] = 16
+    args["lora_alpha"] = 64
+    args["lora_dropout"] = 0.1 
+
 
     # 判断是多卡训练还是单卡训练
     if args.local_rank == -1:
