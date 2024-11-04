@@ -176,16 +176,16 @@ def train():
     with open(args.ds_file, "r", encoding="utf-8")as f:
         ds_config = json.load(f)
         # 每个GPU的训练微批大小
-    # ds_config["train_micro_batch_size_per_gpu"] = args.per_device_train_batch_size
-    #     # 总训练批大小 = 微批 * GPU数量 * 梯度累积步数
-    # ds_config['train_batch_size'] = args.per_device_train_batch_size * torch.distributed.get_world_size() * args.gradient_accumulation_steps
-    # ds_config["gradient_accumulation_steps"] = args.gradient_accumulation_steps
-    # # load optimizer
-    # ds_config["optimizer"]["params"]["lr"] = args.learning_rate
-    #     # Adam的动量参数
-    # ds_config["optimizer"]["params"]["betas"] = (0.9, 0.95)
-    # ds_config["optimizer"]["params"]["eps"] = 1e-8
-    # ds_config["optimizer"]["params"]["weight_decay"] = 0.1    
+    ds_config["train_micro_batch_size_per_gpu"] = args.per_device_train_batch_size
+        # 总训练批大小 = 微批 * GPU数量 * 梯度累积步数
+    ds_config['train_batch_size'] = args.per_device_train_batch_size * torch.distributed.get_world_size() * args.gradient_accumulation_steps
+    ds_config["gradient_accumulation_steps"] = args.gradient_accumulation_steps
+    # load optimizer
+    ds_config["optimizer"]["params"]["lr"] = args.learning_rate
+        # Adam的动量参数
+    ds_config["optimizer"]["params"]["betas"] = (0.9, 0.95)
+    ds_config["optimizer"]["params"]["eps"] = 1e-8
+    ds_config["optimizer"]["params"]["weight_decay"] = 0.1    
     # num_training_steps = args.num_train_epochs * math.ceil(len(train_dataloader) / args.gradient_accumulation_steps)
     # print_rank_0("num_training_steps = {}".format(num_training_steps), args.global_rank)
     # num_warmup_steps = int(args.warmup_ratio * num_training_steps)
@@ -193,8 +193,8 @@ def train():
     # # 在预热阶段会逐步增加学习率，从而避免初始学习率过大导致的不稳定训练
     # ds_config["scheduler"]["params"]["total_num_steps"] = num_training_steps
     # ds_config["scheduler"]["params"]["warmup_num_steps"] = num_warmup_steps
-    # ds_config["scheduler"]["params"]["warmup_max_lr"] = args.learning_rate
-    # ds_config["scheduler"]["params"]["warmup_min_lr"] = args.learning_rate * 0.1
+    ds_config["scheduler"]["params"]["warmup_max_lr"] = args.learning_rate
+    ds_config["scheduler"]["params"]["warmup_min_lr"] = args.learning_rate * 0.1
 
     # 设置模型gradient_checkpointing
     if args.gradient_checkpointing:
