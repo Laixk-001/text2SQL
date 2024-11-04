@@ -120,7 +120,7 @@ def train():
     parser.add_argument("--warmup_ratio",default=0.1,type=float,help="",nargs="?")
     parser.add_argument("--output_dir",default=None,type=str,help="",nargs="?")
     parser.add_argument("--seed", type=int, default=1234, help="",nargs="?")
-    parser.add_argument("--local_rank", type=int, default=2, help="",nargs="?")
+    parser.add_argument("--local_rank", type=int, default=0, help="",nargs="?")
     parser.add_argument("--show_loss_step", default=10, type=int, help="",nargs="?")
     # parser.add_argument("--gradient_checkpointing", action='store_true', help="",nargs="?")
     parser.add_argument("--save_model_step", default=None, type=int, help="",nargs="?")
