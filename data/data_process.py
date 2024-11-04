@@ -245,7 +245,7 @@ def make_input_data(home_path, file_name, save_name,sqlite_info_name="sqlite_inf
             message.append(message_assistant)
             messages["messages"] = message
 
-            objs.append(message)
+            objs.append(messages)
 
     # with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
     #     json.dump(objs, fout,ensure_ascii=False)
