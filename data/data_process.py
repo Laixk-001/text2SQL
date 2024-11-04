@@ -209,6 +209,58 @@ def make_llm_data(home_path, file_name, save_name,tokenizer, sqlite_info_name="s
     with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
         fout.writelines("\n".join([json.dumps(one, ensure_ascii=False) for one in objs]))
 
+def make_input_data(home_path, file_name, save_name,sqlite_info_name="sqlite_info_zh.json"):
+    with open(os.path.join(home_path, sqlite_info_name), "r", encoding="utf-8")as f:
+        sqlite_info = json.load(f)
+    with open(os.path.join(home_path, file_name), "r", encoding="utf-8")as f:
+        samples = json.load(f)
+
+        objs = []
+
+        for sample in tqdm(samples):
+            messages = dict()
+            message = []
+            message_system = dict()
+            message_user = dict()
+            message_assistant = dict()
+            db_id = sample["db_id"]
+            question = sample["question"]
+            sql_query_zh = sample["query"]
+            sqlite_query = sqlite_info[db_id]["sqlite"]
+            # sqlite_query = sample["sql"]
+
+            message_system["role"] = "system"
+            message_system["content"] = f"### Instructions:
+Your task is convert a question into a SQL query, given a Postgres database schema.
+Adhere to these rules:
+- **Deliberately go through the question and database schema word by word** to appropriately answer the question
+- **Use Table Aliases** to prevent ambiguity. For example, `SELECT table1.col1, table2.col1 FROM table1 JOIN table2 ON table1.id = table2.id`.
+- When creating a ratio, always cast the numerator as float"
+            message.append(message_system)
+            
+            message_user["role"] = "user"
+            message_user["content"] = f"### Input:
+Generate a SQL query that answers the question `{question}`.
+This query will run on a database whose schema is represented in this string:
+{sqlite_query}"
+            message.append(message_user)
+            
+            message_assistant["role"] = "assistant"
+            message_assistant["content"] = f"### Response:
+Based on your instructions, here is the SQL query I have generated to answer the question `{question}`:
+`{sql_query_zh}`"
+            
+            message.append(message_assistant)
+            messages["messages"] = message
+
+            objs.append(message)
+
+    # with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
+    #     json.dump(objs, fout,ensure_ascii=False)
+
+    with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
+        fout.writelines("\n".join([json.dumps(one, ensure_ascii=False) for one in objs]))
+
     # Set special tokens globally to avoid adding them multiple times.
 def setup_tokenizer(tokenizer):
     tokenizer.add_special_tokens({
@@ -258,6 +310,8 @@ if __name__ == "__main__":
         trust_remote_code=True
     )
     tokenizer = setup_tokenizer(tokenizer)  # Set special tokens once
+    make_input_data(home_path,"dev.json", "text2sql_dev_text_zh.json")
+    make_input_data(home_path,"train.json", "text2sql_train_text_zh.json")
         
-    make_llm_data(home_path,"dev.json", "text2sql_dev_zh.json",tokenizer)
-    make_llm_data(home_path,"train.json", "text2sql_train_zh.json",tokenizer)
+    # make_llm_data(home_path,"dev.json", "text2sql_dev_zh.json",tokenizer)
+    # make_llm_data(home_path,"train.json", "text2sql_train_zh.json",tokenizer)
