@@ -22,7 +22,7 @@ import subprocess
 import hashlib
 import random
 import string
-import nltk
+# import nltk
 class MPLogExceptions(object):
     def __init__(self, callable):
         self.__callable = callable
