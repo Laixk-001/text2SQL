@@ -1,6 +1,6 @@
 # export PATH=/path/to/miniconda3/envs/qwen/bin:$PATH;
 # cd ./Qwen2.5-Coder-evaluation/sft/;
-cd /root/code/text2SQL/data/;
+# cd /root/code/text2SQL/data/;
 INPUT_PATH=${1}
 OUTPUT_PATH=${2}
 TOKENIZER_PATH=${3}
