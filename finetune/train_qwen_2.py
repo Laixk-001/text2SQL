@@ -58,7 +58,7 @@ def parse_args():
     parser.add_argument("--lora_dropout", type=float, default=0.1, help="")
 
     parser = deepspeed.add_config_arguments(parser)
-    return parser.parse_args()
+    return parser.parse_args(args=[])
 
 def is_master():
     return dist.get_rank() == 0
