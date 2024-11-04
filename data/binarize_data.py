@@ -8,7 +8,7 @@ from typing import Dict
 import argparse
 import itertools
 import json
-from .utils import find_next_line,multi_tasks_from_file,write_jsonl_file
+from .utils.utils import find_next_line,multi_tasks_from_file,write_jsonl_file
 
 # Set special tokens globally to avoid adding them multiple times.
 def setup_tokenizer(tokenizer):
