@@ -49,9 +49,9 @@ echo "WORLD_SIZE" $WORLD_SIZE "MICRO BATCH SIZE" $MICRO_BATCH_SIZE "GRAD_ACCU" $
 echo $DISTRIBUTED_ARGS
 
 # cd ROOT_PATH="/path/to/sft/";
-torchrun ${DISTRIBUTED_ARGS} train_qwen.py \
+torchrun ${DISTRIBUTED_ARGS} train.py \
     --model_name_or_path  ${PRETRAINED_MODEL} \
-    --train_path $TRAIN_PATH \
+    --data_path $TRAIN_PATH \
     --test_path $TEST_PATH \
     --model_max_length ${MAX_LENGTH} \
     --output_dir ${OUTPUT_DIR} \
