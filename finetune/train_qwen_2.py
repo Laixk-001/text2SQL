@@ -101,6 +101,7 @@ def train():
     # args["lora_dim"] = 16
     # args["lora_alpha"] = 64
     # args["lora_dropout"] = 0.1 
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     parser = argparse.ArgumentParser()
     # 模型配置
     parser.add_argument("--model_name_or_path",type=str,default="/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/",help="model name or path",nargs="?")
