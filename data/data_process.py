@@ -239,9 +239,7 @@ def make_input_data(home_path, file_name, save_name,sqlite_info_name="sqlite_inf
             message.append(message_user)
             
             message_assistant["role"] = "assistant"
-            message_assistant_str = f"### Response:
-Based on your instructions, here is the SQL query I have generated to answer the question `{question}`:
-`{sql_query_zh}`"
+            message_assistant_str = f"### Response:\nBased on your instructions, here is the SQL query I have generated to answer the question `{question}`:\n`{sql_query_zh}`"
             message_assistant["content"] = message_assistant_str
             
             message.append(message_assistant)
