@@ -2,7 +2,6 @@
     "bf16": {
       "enabled": "auto"
     },
-
     "optimizer": {
       "type": "AdamW",
       "params": {
@@ -24,11 +23,11 @@
     "zero_optimization": {
       "stage": 3,
       "offload_optimizer": {
-        "device": "auto",
+        "device": "cpu",
         "pin_memory": true
       },
       "offload_param": {
-        "device": "auto",
+        "device": "cpu",
         "pin_memory": true
       },
       "overlap_comm": true,
@@ -46,7 +45,6 @@
     "steps_per_print": 10,
     "train_batch_size": "auto",
     "train_micro_batch_size_per_gpu": "auto",
-    "wall_clock_breakdown": false,
-    "prescale_gradients": false
+    "wall_clock_breakdown": false
   }
   

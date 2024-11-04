@@ -9,13 +9,15 @@ export NCCL_IB_QPS_PER_CONNECTION=8
 export NCCL_NET_PLUGIN=none
 export PATH=/root/miniconda3/envs/qwen/bin:$PATH;
 
-DATA_PATH=${1}
+TRAIN_PATH=${1}
 PRETRAINED_MODEL=${2}
 OUTPUT_DIR=${3}
+TEST_PATH=${4}
 
-DATA_PATH=${DATA_PATH:-"/root/autodl-fs/DuSQL/text2sql_train_zh.json"}
+TRAIN_PATH=${TRAIN_PATH:-"/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json"}
 PRETRAINED_MODEL=${PRETRAINED_MODEL:-"/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/"}
 OUTPUT_DIR=${OUTPUT_DIR:-"/root/autodl-tmp/output_dir_qlora/lr${LR}-wr${WARMUP_STEPS}-wd${WEIGHT_DECAY}-bsz${BATCH_SIZE}-maxlen${MAX_LENGTH}/"}
+TEST_PATH=${TEST_PATH:-"/root/autodl-fs/DuSQL/text2sql_dev_tokenizer_zh.json"}
 
 GPUS_PER_NODE=$(python -c "import torch; print(torch.cuda.device_count());")
 MASTER_ADDR=${MASTER_ADDR:-localhost}
@@ -47,16 +49,17 @@ echo "WORLD_SIZE" $WORLD_SIZE "MICRO BATCH SIZE" $MICRO_BATCH_SIZE "GRAD_ACCU" $
 echo $DISTRIBUTED_ARGS
 
 # cd ROOT_PATH="/path/to/sft/";
-torchrun ${DISTRIBUTED_ARGS} train.py \
+torchrun ${DISTRIBUTED_ARGS} train_qwen_1.py \
     --model_name_or_path  ${PRETRAINED_MODEL} \
-    --data_path $DATA_PATH \
+    --train_path $TRAIN_PATH \
+    --test_path $TEST_PATH \
     --model_max_length ${MAX_LENGTH} \
     --output_dir ${OUTPUT_DIR} \
-    --num_train_epochs 3 \
+    --num_train_epochs 1 \
     --per_device_train_batch_size ${MICRO_BATCH_SIZE} \
     --gradient_accumulation_steps ${GRAD_ACCU} \
     --per_device_eval_batch_size 4 \
-    --evaluation_strategy "no" \
+    --evaluation_strategy "yes" \
     --save_strategy "steps" \
     --save_steps 100 \
     --save_total_limit 100 \
