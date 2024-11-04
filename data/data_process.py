@@ -230,25 +230,19 @@ def make_input_data(home_path, file_name, save_name,sqlite_info_name="sqlite_inf
             # sqlite_query = sample["sql"]
 
             message_system["role"] = "system"
-            message_system["content"] = f"### Instructions:
-Your task is convert a question into a SQL query, given a Postgres database schema.
-Adhere to these rules:
-- **Deliberately go through the question and database schema word by word** to appropriately answer the question
-- **Use Table Aliases** to prevent ambiguity. For example, `SELECT table1.col1, table2.col1 FROM table1 JOIN table2 ON table1.id = table2.id`.
-- When creating a ratio, always cast the numerator as float"
+            message_system["content"] = "### Instructions:\nYour task is convert a question into a SQL query, given a Postgres database schema.\nAdhere to these rules:\n- **Deliberately go through the question and database schema word by word** to appropriately answer the question\n- **Use Table Aliases** to prevent ambiguity. For example, `SELECT table1.col1, table2.col1 FROM table1 JOIN table2 ON table1.id = table2.id`.\n- When creating a ratio, always cast the numerator as float"
             message.append(message_system)
             
             message_user["role"] = "user"
-            message_user["content"] = f"### Input:
-Generate a SQL query that answers the question `{question}`.
-This query will run on a database whose schema is represented in this string:
-{sqlite_query}"
+            message_user_str = f"### Input:\nGenerate a SQL query that answers the question `{question}`.\nThis query will run on a database whose schema is represented in this string:\n{sqlite_query}"
+            message_user["content"] = message_user_str
             message.append(message_user)
             
             message_assistant["role"] = "assistant"
-            message_assistant["content"] = f"### Response:
+            message_assistant_str = f"### Response:
 Based on your instructions, here is the SQL query I have generated to answer the question `{question}`:
 `{sql_query_zh}`"
+            message_assistant["content"] = message_assistant_str
             
             message.append(message_assistant)
             messages["messages"] = message
