@@ -14,10 +14,10 @@ PRETRAINED_MODEL=${2}
 OUTPUT_DIR=${3}
 TEST_PATH=${4}
 
-TRAIN_PATH=${TRAIN_PATH:-"/root/autodl-tmp/data/DuSQL/text2sql_train_tokenizer_zh.json"}
+TRAIN_PATH=${TRAIN_PATH:-"/root/autodl-tmp/data/DuSQL/text2sql_train_zh.json"}
 PRETRAINED_MODEL=${PRETRAINED_MODEL:-"/root/autodl-tmp/model/Qwen2_5_Coder_7B_Instruct/"}
 OUTPUT_DIR=${OUTPUT_DIR:-"/root/autodl-tmp/output_dir_qlora/lr${LR}-wr${WARMUP_STEPS}-wd${WEIGHT_DECAY}-bsz${BATCH_SIZE}-maxlen${MAX_LENGTH}/"}
-TEST_PATH=${TEST_PATH:-"/root/autodl-tmp/data/DuSQL/text2sql_dev_tokenizer_zh.json"}
+TEST_PATH=${TEST_PATH:-"/root/autodl-tmp/data/DuSQL/text2sql_dev_zh.json"}
 
 GPUS_PER_NODE=$(python -c "import torch; print(torch.cuda.device_count());")
 MASTER_ADDR=${MASTER_ADDR:-localhost}
