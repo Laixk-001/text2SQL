@@ -28,6 +28,11 @@
 cd data
 
 python3 dusql_process.py
+
+cd text2SQL
+
+python -m data.binarize_data
+
 ```
 本次微调主要针对[dusql数据](https://aistudio.baidu.com/competition/detail/47/0/task-definition) 进行应用，并且由于当前dusql数据中，表格信息以中文为主，因此本次我们还将采用翻译模型对数据中的表格字段信息进行翻译，翻译器可以使用开源中-英翻译模型。
 
