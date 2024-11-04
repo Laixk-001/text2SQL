@@ -8,7 +8,7 @@ from typing import Dict
 import argparse
 import itertools
 import json
-from .utils import utils
+from .utils import find_next_line,multi_tasks_from_file,write_jsonl_file
 
 # Set special tokens globally to avoid adding them multiple times.
 def setup_tokenizer(tokenizer):
@@ -81,7 +81,7 @@ def read_file_from_position_with_chatml_format_processor(args):
     max_len = args["max_len"]
     objs = []
     with open(filename, 'r', encoding='utf-8', errors='replace') as f:  # Using 'replace' to handle errors better
-        current_position = utils.find_next_line(f, start_position)
+        current_position = find_next_line(f, start_position)
         f.seek(current_position)
         if current_position >= end_position:
             print(f"worker_id {worker_id} completed")
@@ -103,8 +103,8 @@ def read_file_from_position_with_chatml_format_processor(args):
 
 
 def tokenize_file(workers=64, chunk_size=10000, input_path="./raw/sft.jsonl", output_path="./processed/sft.jsonl", tokenizer=None, max_len=32768):
-    output_objs = utils.multi_tasks_from_file(input_path, workers=workers, task=read_file_from_position_with_chatml_format_processor, chunk_size=chunk_size, args={"tokenizer": tokenizer, "max_len": max_len})
-    utils.write_jsonl_file(output_objs, output_path)
+    output_objs = multi_tasks_from_file(input_path, workers=workers, task=read_file_from_position_with_chatml_format_processor, chunk_size=chunk_size, args={"tokenizer": tokenizer, "max_len": max_len})
+    write_jsonl_file(output_objs, output_path)
     np.save(f"{output_path}.npy", output_objs, allow_pickle=True)
     print(f"Successfully saved to {output_path}.npy")
 
