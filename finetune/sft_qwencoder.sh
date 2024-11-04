@@ -32,7 +32,7 @@ DISTRIBUTED_ARGS="
     --master_addr $MASTER_ADDR \
     --master_port $MASTER_PORT
 "
-DEEPSPEED_CONFIG="./default_offload_opt_param.json  "
+DEEPSPEED_CONFIG="default_offload_opt_param.json  "
 BATCH_SIZE=1024
 MICRO_BATCH_SIZE=4
 GRAD_ACCU=$(($BATCH_SIZE / $WORLD_SIZE / $MICRO_BATCH_SIZE))
