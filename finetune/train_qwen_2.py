@@ -110,7 +110,6 @@ def train():
     parser.add_argument("--max_len",default=2048,type=int,help="",nargs="?")
     parser.add_argument("--model_max_length",default=1024,type=int,help="",nargs="?")
     parser.add_argument("--truncate_source",default=True,type=bool,nargs="?")
-    parser.add_argument("--is_skip",action="store_true",help="",nargs="?")
     # 训练配置
     parser.add_argument("--per_device_train_batch_size",default=16,type=int,help="",nargs="?")
     parser.add_argument("--learning_rate",default=1e-4,type=float,help="",nargs="?")
@@ -122,7 +121,7 @@ def train():
     parser.add_argument("--seed", type=int, default=1234, help="",nargs="?")
     parser.add_argument("--local_rank", type=int, default=-1, help="",nargs="?")
     parser.add_argument("--show_loss_step", default=10, type=int, help="",nargs="?")
-    parser.add_argument("--gradient_checkpointing", action='store_true', help="",nargs="?")
+    # parser.add_argument("--gradient_checkpointing", action='store_true', help="",nargs="?")
     parser.add_argument("--save_model_step", default=None, type=int, help="",nargs="?")
     # DeepSpeed配置
     parser.add_argument("--ds_file", type=str, default="ds_zero2.json", help="",nargs="?")
