@@ -27,12 +27,12 @@ except ImportError:
     from tensorboard import SummaryWriter
 
 def parse_args():
-    parser = argparse.ArgumentParser(args=[])
+    parser = argparse.ArgumentParser()
     # 模型配置
-    parser.add_argument("--model_name_or_path",type=str,default="/root/autodl-tmp/model/Qwen2_5_Coder_7B_Instruct",help="model name or path",required=True)
+    parser.add_argument("--model_name_or_path",type=str,default="/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/",help="model name or path",required=True)
     # 数据配置
-    parser.add_argument("--train_path",default="/root/autodl-tmp/data/text2sql_train_zh.json",type=str,help="")
-    parser.add_argument("--test_path",default="/root/autodl-tmp/data/text2sql_dev_zh.json",type=str,help="")
+    parser.add_argument("--train_path",default="/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json",type=str,help="")
+    parser.add_argument("--test_path",default="/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json",type=str,help="")
     parser.add_argument("--max_len",default=2048,type=int,help="")
     parser.add_argument("--model_max_length",default=1024,type=int,help="")
     parser.add_argument("--truncate_source",default=True,type=bool)
@@ -79,6 +79,7 @@ class LoggingCallback(transformers.TrainerCallback):
 def train():
     # 设置模型训练参数
     args = parse_args()
+
     # 判断是多卡训练还是单卡训练
     if args.local_rank == -1:
         device = torch.device("cuda")
