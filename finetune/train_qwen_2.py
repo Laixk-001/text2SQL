@@ -80,27 +80,58 @@ def train():
     # 设置模型训练参数
     # args = parse_args()
     args = dict()
-    args["model_name_or_path"] = "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/"
-    args["train_path"] = "/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json" 
-    args["test_path"] = "/root/autodl-fs/DuSQL/text2sql_dev_tokenizer_zh.json"
-    args["max_len"] = 2048
-    args["model_max_length"] = 1024
-    args["truncate_source"] = True
-    args["per_device_train_batch_size"] = 2
-    args["learning_rate"] = 1e-4
-    args["weight_decay"] = 0.1
-    args["num_train_epochs"] = 3
-    args["gradient_accumulation_steps"] =4
-    args["warmup_ratio"] = 0.03
-    args["output_dir"] = "/root/autodl-tmp/output_dir_qlora"
-    args["local_rank"] = -1
-    args["show_loss_step"] = 10
-    args["gradient_checkpointing"] = 'store_true'
-    args["save_model_step"] = 100
-    args["ds_file"] = "default_offload_opt_param.json"
-    args["lora_dim"] = 16
-    args["lora_alpha"] = 64
-    args["lora_dropout"] = 0.1 
+    # args["model_name_or_path"] = "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/"
+    # args["train_path"] = "/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json" 
+    # args["test_path"] = "/root/autodl-fs/DuSQL/text2sql_dev_tokenizer_zh.json"
+    # args["max_len"] = 2048
+    # args["model_max_length"] = 1024
+    # args["truncate_source"] = True
+    # args["per_device_train_batch_size"] = 2
+    # args["learning_rate"] = 1e-4
+    # args["weight_decay"] = 0.1
+    # args["num_train_epochs"] = 3
+    # args["gradient_accumulation_steps"] =4
+    # args["warmup_ratio"] = 0.03
+    # args["output_dir"] = "/root/autodl-tmp/output_dir_qlora"
+    # args["local_rank"] = -1
+    # args["show_loss_step"] = 10
+    # args["gradient_checkpointing"] = 'store_true'
+    # args["save_model_step"] = 100
+    # args["ds_file"] = "default_offload_opt_param.json"
+    # args["lora_dim"] = 16
+    # args["lora_alpha"] = 64
+    # args["lora_dropout"] = 0.1 
+    parser = argparse.ArgumentParser()
+    # 模型配置
+    parser.add_argument("--model_name_or_path",type=str,default="/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/",help="model name or path",required=True)
+    # 数据配置
+    parser.add_argument("--train_path",default="/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json",type=str,help="")
+    parser.add_argument("--test_path",default="/root/autodl-fs/DuSQL/text2sql_train_tokenizer_zh.json",type=str,help="")
+    parser.add_argument("--max_len",default=2048,type=int,help="")
+    parser.add_argument("--model_max_length",default=1024,type=int,help="")
+    parser.add_argument("--truncate_source",default=True,type=bool)
+    parser.add_argument("--is_skip",action="store_true",help="")
+    # 训练配置
+    parser.add_argument("--per_device_train_batch_size",default=16,type=int,help="")
+    parser.add_argument("--learning_rate",default=1e-4,type=float,help="")
+    parser.add_argument("--weight_decay",default=0.1,type=float,help="")
+    parser.add_argument("--num_train_epochs",default=1,type=int,help="")
+    parser.add_argument("--gradient_accumulation_steps",default=1,type=int,help="")
+    parser.add_argument("--warmup_ratio",default=0.1,type=float,help="")
+    parser.add_argument("--output_dir",default=None,type=str,help="")
+    parser.add_argument("--seed", type=int, default=1234, help="")
+    parser.add_argument("--local_rank", type=int, default=-1, help="")
+    parser.add_argument("--show_loss_step", default=10, type=int, help="")
+    parser.add_argument("--gradient_checkpointing", action='store_true', help="")
+    parser.add_argument("--save_model_step", default=None, type=int, help="")
+    # DeepSpeed配置
+    parser.add_argument("--ds_file", type=str, default="ds_zero2.json", help="")
+    # QLoRA配置
+    parser.add_argument("--lora_dim", type=int, default=8, help="")
+    parser.add_argument("--lora_alpha", type=int, default=30, help="")
+    parser.add_argument("--lora_dropout", type=float, default=0.1, help="")
+
+    parser = deepspeed.add_config_arguments(parser)
 
 
     # 判断是多卡训练还是单卡训练
