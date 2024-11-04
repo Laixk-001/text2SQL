@@ -27,7 +27,7 @@ except ImportError:
     from tensorboard import SummaryWriter
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(args=[])
     # 模型配置
     parser.add_argument("--model_name_or_path",type=str,default="/root/autodl-tmp/model/Qwen2_5_Coder_7B_Instruct",help="model name or path",required=True)
     # 数据配置
@@ -58,7 +58,7 @@ def parse_args():
     parser.add_argument("--lora_dropout", type=float, default=0.1, help="")
 
     parser = deepspeed.add_config_arguments(parser)
-    return parser.parse_args(args=[])
+    return parser.parse_args()
 
 def is_master():
     return dist.get_rank() == 0
