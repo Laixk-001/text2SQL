@@ -21,6 +21,7 @@ CUDA_VISIBLE_DEVICES=0,1 deepspeed --master_port 5545 train.py --train_path /roo
                                                                    --output_dir ./output_dir_qlora  \
                                                                    --gradient_checkpointing  \
                                                                    --ds_file ds_zero2_no_offload.json  \
+                                                                   --rope_scaling default  \
                                                                    --is_skip
 ```
 
