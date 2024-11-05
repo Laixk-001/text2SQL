@@ -190,6 +190,7 @@ def train():
             # 获取训练结果
             outputs = model(**batch, use_cache=False)
             loss = outputs.loss
+            print(loss)
             # 损失进行回传
             model.backward(loss)
             tr_loss += loss.item()
