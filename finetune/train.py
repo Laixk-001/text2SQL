@@ -92,7 +92,7 @@ def train():
     torch.distributed.barrier()
     # 加载千问模型分词器
     tokenizer = Qwen2Tokenizer.from_pretrained(args.model_name_or_path)
-    tokenizer.pad_token_id = tokenizer.eod_id
+    # tokenizer.pad_token_id = tokenizer.eod_id
     # 加载千问模型
     device_map = {'': int(os.environ.get('LOCAL_RANK', '0'))}
     model_config = Qwen2Config.from_pretrained(args.model_name_or_path)
