@@ -2,7 +2,7 @@ import jsonlines
 import pandas as pd
 import os
 import multiprocessing as mp
-import tqdm
+from tqdm import tqdm
 from pathlib import Path
 import numpy as np
 import random
