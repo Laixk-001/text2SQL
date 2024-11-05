@@ -182,20 +182,6 @@ def train():
     tr_loss, logging_loss, min_loss = 0.0, 0.0, 0.0
     global_step = 0
 
-    # 测试test_dataloader
-    model.eval()
-    total_loss = 0
-    # 获得当前的批次和数据，tqdm的单位为batch，总共有len(eval_dataloader)次
-    for step, batch in tqdm(enumerate(test_dataloader), total=len(test_dataloader),unit="batch"):
-        batch = to_device(batch, device)
-        # 不需要计算梯度，节省内存并加速
-        with torch.no_grad():
-            # 将batch的参数传递给模型的前向函数
-            outputs = model(**batch, use_cache=False)
-            loss=outputs.loss
-            total_loss += loss.float()
-    total_loss = total_loss /(step + 1)
-
     # 模型开始训练
     for epoch in range(args.num_train_epochs):
         print_rank_0("Beginning of Epoch {}/{}, Total Micro Batches {}".format(epoch + 1, args.num_train_epochs, len(train_dataloader)), args.global_rank)
