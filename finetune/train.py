@@ -95,7 +95,7 @@ def train():
     # tokenizer.pad_token_id = tokenizer.eod_id
     # 加载千问模型
     device_map = {'': int(os.environ.get('LOCAL_RANK', '0'))}
-    model_config = Qwen2Config.from_pretrained(args.model_name_or_path)
+    model_config = Qwen2Config.from_pretrained(args.model_name_or_path,type="default")
     model = Qwen2ForCausalLM.from_pretrained(args.model_name_or_path,
                                             quantization_config=BitsAndBytesConfig(
                                                 load_in_4bit=True,
