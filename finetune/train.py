@@ -18,13 +18,19 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 import deepspeed
 from transformers import BitsAndBytesConfig
-from utils import print_trainable_parameters, print_rank_0, to_device, set_random_seed, save_model, DataCollator, \
-    find_all_linear_names, evaluation
+# from utils import print_trainable_parameters, print_rank_0, to_device, set_random_seed, save_model, DataCollator, \
+#     find_all_linear_names, evaluation
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
-from qwen1_8.modeling_qwen import QWenLMHeadModel
-from qwen1_8.tokenization_qwen import QWenTokenizer
-from qwen1_8.configuration_qwen import QWenConfig
-from utils import QwenPromptDataSet
+# from qwen1_8.modeling_qwen import QWenLMHeadModel
+# from qwen1_8.tokenization_qwen import QWenTokenizer
+# from qwen1_8.configuration_qwen import QWenConfig
+
+from qwen2_5.modeling_qwen2 import Qwen2ForCausalLM
+from qwen2_5.tokenization_qwen2 import Qwen2Tokenizer
+from qwen2_5.configuration_qwen2 import Qwen2Config
+from utils.utils import SupervisedDataset,DataCollatorForSupervisedDataset,print_trainable_parameters, print_rank_0, to_device, set_random_seed, save_model, DataCollator, \
+    find_all_linear_names, evaluation
+
 import os
 
 try:
@@ -85,12 +91,12 @@ def train():
     set_random_seed(args.seed)
     torch.distributed.barrier()
     # 加载千问模型分词器
-    tokenizer = QWenTokenizer.from_pretrained(args.model_name_or_path)
+    tokenizer = Qwen2Tokenizer.from_pretrained(args.model_name_or_path)
     tokenizer.pad_token_id = tokenizer.eod_id
     # 加载千问模型
     device_map = {'': int(os.environ.get('LOCAL_RANK', '0'))}
-    model_config = QWenConfig.from_pretrained(args.model_name_or_path)
-    model = QWenLMHeadModel.from_pretrained(args.model_name_or_path,
+    model_config = Qwen2Config.from_pretrained(args.model_name_or_path)
+    model = Qwen2ForCausalLM.from_pretrained(args.model_name_or_path,
                                             quantization_config=BitsAndBytesConfig(
                                                 load_in_4bit=True,
                                                 bnb_4bit_compute_dtype=model_config.torch_dtype,
@@ -122,8 +128,8 @@ def train():
     print_trainable_parameters(model)
 
     # 加载模型训练所需要的数据，如果是多卡训练需要分布式加载数据
-    train_dataset = QwenPromptDataSet(args.train_path, tokenizer, args.max_len, args.max_src_len, args.is_skip)
-    test_dataset = QwenPromptDataSet(args.test_path, tokenizer, args.max_len, args.max_src_len, args.is_skip)
+    train_dataset = SupervisedDataset(args.train_path, tokenizer, args.max_len, args.max_src_len, args.is_skip)
+    test_dataset = SupervisedDataset(args.test_path, tokenizer, args.max_len, args.max_src_len, args.is_skip)
     if args.local_rank == -1:
         train_sampler = RandomSampler(train_dataset)
         test_sampler = SequentialSampler(test_dataset)
@@ -131,7 +137,7 @@ def train():
         train_sampler = DistributedSampler(train_dataset)
         test_sampler = DistributedSampler(test_dataset)
 
-    data_collator = DataCollator(tokenizer)
+    data_collator = DataCollatorForSupervisedDataset(tokenizer)
     train_dataloader = DataLoader(train_dataset, collate_fn=data_collator, sampler=train_sampler, batch_size=args.per_device_train_batch_size)
     test_dataloader = DataLoader(test_dataset, collate_fn=data_collator, sampler=test_sampler, batch_size=args.per_device_train_batch_size)
     print_rank_0("len(train_dataloader) = {}".format(len(train_dataloader)), args.global_rank)
