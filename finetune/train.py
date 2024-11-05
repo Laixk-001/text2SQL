@@ -107,6 +107,7 @@ def train():
                                             ),
                                             torch_dtype=model_config.torch_dtype,
                                             device_map=device_map,
+                                            rope_scaling="default"  \
                                             )
     model = prepare_model_for_kbit_training(model)
     # 找到模型中所有的全连接层
