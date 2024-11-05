@@ -38,8 +38,9 @@ from transformers.modeling_outputs import (
     SequenceClassifierOutputWithPast,
     TokenClassifierOutput,
 )
-from transformers.modeling_rope_utils import ROPE_INIT_FUNCTIONS
-from transformers.modeling_utils import PreTrainedModel
+# from transformers.modeling_rope_utils import ROPE_INIT_FUNCTIONS
+from transformers import ROPE_INIT_FUNCTIONS
+from transformers import PreTrainedModel
 from transformers.utils import (
     add_start_docstrings,
     add_start_docstrings_to_model_forward,
@@ -49,7 +50,7 @@ from transformers.utils import (
     logging,
     replace_return_docstrings,
 )
-from .configuration_qwen2 import Qwen2Config
+from transformers import Qwen2Config
 
 
 if is_flash_attn_2_available():
