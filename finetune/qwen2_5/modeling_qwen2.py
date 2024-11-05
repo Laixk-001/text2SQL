@@ -39,7 +39,7 @@ from transformers.modeling_outputs import (
     TokenClassifierOutput,
 )
 # from transformers.modeling_rope_utils import ROPE_INIT_FUNCTIONS
-from transformers import ROPE_INIT_FUNCTIONS
+from .modeling_rope_utils import ROPE_INIT_FUNCTIONS
 from transformers import PreTrainedModel
 from transformers.utils import (
     add_start_docstrings,
