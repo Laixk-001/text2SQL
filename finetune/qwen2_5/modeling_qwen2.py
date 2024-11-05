@@ -1189,29 +1189,43 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel, GenerationMixin):
         # TODO: remove the float() operation in v4.46
         logits = self.lm_head(hidden_states[:, -num_logits_to_keep:, :]).float()
 
-        # loss = None
-        # if labels is not None:
-        #     # Upcast to float if we need to compute the loss to avoid potential precision issues
-        #     logits = logits.float()
-        #     # Shift so that tokens < n predict n
-        #     shift_logits = logits[..., :-1, :].contiguous()
-        #     shift_labels = labels[..., 1:].contiguous()
-        #     # Flatten the tokens
-        #     loss_fct = CrossEntropyLoss()
-        #     shift_logits = shift_logits.view(-1, self.config.vocab_size)
-        #     shift_labels = shift_labels.view(-1)
-        #     # Enable model parallelism
-        #     shift_labels = shift_labels.to(shift_logits.device)
-        #     loss = loss_fct(shift_logits, shift_labels)
-
+        loss = None
         if labels is not None:
-            labels = labels.to(logits.device)
+            # Upcast to float if we need to compute the loss to avoid potential precision issues
+            logits = logits.float()
+            # Shift so that tokens < n predict n
             shift_logits = logits[..., :-1, :].contiguous()
             shift_labels = labels[..., 1:].contiguous()
+            # Flatten the tokens
             loss_fct = CrossEntropyLoss()
-            loss = loss_fct(
-                shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1)
-            )
+            shift_logits = shift_logits.view(-1, self.config.vocab_size)
+            shift_labels = shift_labels.view(-1)
+            # Enable model parallelism
+            shift_labels = shift_labels.to(shift_logits.device)
+            print("Shift logits shape:", shift_logits.shape)
+            print("Shift labels shape:", shift_labels.shape)
+            print("Shift labels min:", shift_labels.min().item(), "max:", shift_labels.max().item())
+
+            # 确保标签在合法范围内
+            assert shift_labels.min() >= 0, "Labels contain negative values!"
+            assert shift_labels.max() < self.config.vocab_size, "Labels exceed vocab size!"
+            assert shift_labels.dtype == torch.long, "Labels should be of type torch.long!"
+            assert shift_logits.shape[0] == shift_labels.shape[0], "Logits and labels do not match in the flattened dimension."
+            assert not torch.isnan(shift_logits).any(), "Logits contain NaN!"
+            assert not torch.isinf(shift_logits).any(), "Logits contain Inf!"
+
+
+
+            loss = loss_fct(shift_logits, shift_labels)
+
+        # if labels is not None:
+        #     labels = labels.to(logits.device)
+        #     shift_logits = logits[..., :-1, :].contiguous()
+        #     shift_labels = labels[..., 1:].contiguous()
+        #     loss_fct = CrossEntropyLoss()
+        #     loss = loss_fct(
+        #         shift_logits.view(-1, shift_logits.size(-1)), shift_labels.view(-1)
+        #     )
 
         if not return_dict:
             output = (logits,) + outputs[1:]
