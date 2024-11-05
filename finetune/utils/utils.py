@@ -67,8 +67,6 @@ class DataCollatorForSupervisedDataset(object):
             input_ids, batch_first=True, padding_value=self.tokenizer.pad_token_id
         )
         labels = torch.nn.utils.rnn.pad_sequence(labels, batch_first=True, padding_value=IGNORE_INDEX)
-        print(f"len of input_ids : {len(input_ids)}")
-        print(f"len of labels : {len(labels)}")
         return dict(
             input_ids=input_ids,
             labels=labels,
