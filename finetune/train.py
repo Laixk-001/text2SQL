@@ -139,7 +139,7 @@ def train():
         train_sampler = DistributedSampler(train_dataset)
         test_sampler = DistributedSampler(test_dataset)
 
-    
+
     data_collator = DataCollatorForSupervisedDataset(tokenizer)
     train_dataloader = DataLoader(train_dataset, collate_fn=data_collator, sampler=train_sampler, batch_size=args.per_device_train_batch_size)
     test_dataloader = DataLoader(test_dataset, collate_fn=data_collator, sampler=test_sampler, batch_size=args.per_device_train_batch_size)
@@ -190,9 +190,7 @@ def train():
             batch = to_device(batch, device)
             # 获取训练结果
             outputs = model(**batch, use_cache=False)
-            print(outputs)
             loss = outputs.loss
-            print(loss)
             # 损失进行回传
             model.backward(loss)
             tr_loss += loss.item()

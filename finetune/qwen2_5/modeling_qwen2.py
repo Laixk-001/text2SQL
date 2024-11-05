@@ -1203,9 +1203,9 @@ class Qwen2ForCausalLM(Qwen2PreTrainedModel, GenerationMixin):
             # Enable model parallelism
             shift_labels = shift_labels.to(shift_logits.device)
             shift_labels[shift_labels < 0] = -100
-            print("Shift logits shape:", shift_logits.shape)
-            print("Shift labels shape:", shift_labels.shape)
-            print("Shift labels min:", shift_labels.min().item(), "max:", shift_labels.max().item())
+            # print("Shift logits shape:", shift_logits.shape)
+            # print("Shift labels shape:", shift_labels.shape)
+            # print("Shift labels min:", shift_labels.min().item(), "max:", shift_labels.max().item())
 
             # 确保标签在合法范围内
             # assert shift_labels.min() >= 0, "Labels contain negative values!"
