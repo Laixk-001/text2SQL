@@ -22,7 +22,7 @@ IGNORE_INDEX = -1
 def read_jsonl_file(file_name, max_sentence=None):
     data = []
     with jsonlines.open(file_name, "r") as r:
-        for i, obj in tqdm.tqdm(enumerate(r)):
+        for i, obj in tqdm(enumerate(r)):
             if max_sentence is not None and i >= max_sentence:
                 return data
             data.append(obj)
