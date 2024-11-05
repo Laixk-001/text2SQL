@@ -18,8 +18,8 @@
 # from ...modeling_rope_utils import rope_config_validation
 # from ...utils import logging
 from transformers import PretrainedConfig
-import logging
-from transformers.modeling_rope_utils import rope_config_validation
+from transformers import logging
+from .modeling_rope_utils import rope_config_validation
 
 
 logger = logging.get_logger(__name__)
