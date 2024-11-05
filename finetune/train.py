@@ -47,7 +47,7 @@ def parse_args():
     parser.add_argument("--train_path", default="", type=str, help="")
     parser.add_argument("--test_path", default="", type=str, help="")
     parser.add_argument("--max_len", type=int, default=1024, help="")
-    parser.add_argument("--max_src_len", type=int, default=256, help="")
+    parser.add_argument("--model_max_length", type=int, default=256, help="")
     parser.add_argument("--is_skip", action='store_true', help="")
     # 训练配置
     parser.add_argument("--per_device_train_batch_size", type=int, default=16, help="")
@@ -129,8 +129,8 @@ def train():
     print_trainable_parameters(model)
 
     # 加载模型训练所需要的数据，如果是多卡训练需要分布式加载数据
-    train_dataset = SupervisedDataset(args.train_path, tokenizer, args.max_len, args.max_src_len, args.is_skip)
-    test_dataset = SupervisedDataset(args.test_path, tokenizer, args.max_len, args.max_src_len, args.is_skip)
+    train_dataset = SupervisedDataset(tokenizer=tokenizer, data_path=args.train_path, args = args)
+    test_dataset = SupervisedDataset(tokenizer=tokenizer, data_path=args.test_path, args = args)
     if args.local_rank == -1:
         train_sampler = RandomSampler(train_dataset)
         test_sampler = SequentialSampler(test_dataset)
