@@ -68,6 +68,7 @@ CUDA_VISIBLE_DEVICES=0,1 deepspeed --master_port 5545 train_qwen.py --train_path
                                                                    --lora_dropout 0.1  \
                                                                    --output_dir /root/autodl-tmp/output_dir_qlora  \
                                                                    --gradient_checkpointing  \
+                                                                   --rope_scaling default  \
                                                                    --ds_file default_offload_opt_param.json  
 ```
 
