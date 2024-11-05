@@ -147,7 +147,7 @@ class Qwen2Config(PretrainedConfig):
         use_cache=True,
         tie_word_embeddings=False,
         rope_theta=10000.0,
-        rope_scaling=None,
+        rope_scaling="default",
         use_sliding_window=False,
         sliding_window=4096,
         max_window_layers=28,
