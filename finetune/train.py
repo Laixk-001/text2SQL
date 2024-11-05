@@ -95,7 +95,7 @@ def train():
     # tokenizer.pad_token_id = tokenizer.eod_id
     # 加载千问模型
     device_map = {'': int(os.environ.get('LOCAL_RANK', '0'))}
-    model_config = Qwen2Config.from_pretrained(args.model_name_or_path)
+    model_config = Qwen2Config.from_pretrained(args.model_name_or_path,rope_scaling="default")
     model = Qwen2ForCausalLM.from_pretrained(args.model_name_or_path,
                                             quantization_config=BitsAndBytesConfig(
                                                 load_in_4bit=True,
@@ -107,7 +107,6 @@ def train():
                                             ),
                                             torch_dtype=model_config.torch_dtype,
                                             device_map=device_map,
-                                            rope_scaling="default"  \
                                             )
     model = prepare_model_for_kbit_training(model)
     # 找到模型中所有的全连接层
