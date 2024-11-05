@@ -62,6 +62,7 @@ def parse_args():
     parser.add_argument("--show_loss_step", default=10, type=int, help="")
     parser.add_argument("--gradient_checkpointing", action='store_true', help="")
     parser.add_argument("--save_model_step", default=None, type=int, help="")
+    parser.add_argument("--truncate_source", action='store_true', help="")    
     # DeepSpeed配置
     parser.add_argument("--ds_file", type=str, default="ds_zero2.json", help="")
     # QLoRA配置
