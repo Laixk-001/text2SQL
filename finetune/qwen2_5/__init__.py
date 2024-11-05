@@ -50,8 +50,8 @@ else:
 
 
 if TYPE_CHECKING:
-    from .configuration_qwen2 import Qwen2Config
-    from .tokenization_qwen2 import Qwen2Tokenizer
+    from transformers import Qwen2Config
+    from transformers import Qwen2Tokenizer
 
     try:
         if not is_tokenizers_available():
@@ -59,7 +59,7 @@ if TYPE_CHECKING:
     except OptionalDependencyNotAvailable:
         pass
     else:
-        from .tokenization_qwen2_fast import Qwen2TokenizerFast
+        from transformers import Qwen2TokenizerFast
 
     try:
         if not is_torch_available():
@@ -67,7 +67,7 @@ if TYPE_CHECKING:
     except OptionalDependencyNotAvailable:
         pass
     else:
-        from .modeling_qwen2 import (
+        from transformers import (
             Qwen2ForCausalLM,
             Qwen2ForSequenceClassification,
             Qwen2ForTokenClassification,
