@@ -28,7 +28,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from qwen2_5.modeling_qwen2 import Qwen2ForCausalLM
 from qwen2_5.tokenization_qwen2 import Qwen2Tokenizer
 from qwen2_5.configuration_qwen2 import Qwen2Config
-from utils.utils import SupervisedDataset,DataCollatorForSupervisedDataset,print_trainable_parameters, print_rank_0, to_device, set_random_seed, save_model, DataCollator, \
+from utils.utils import SupervisedDataset,DataCollatorForSupervisedDataset,print_trainable_parameters, print_rank_0, to_device, set_random_seed, save_model, \
     find_all_linear_names, evaluation
 
 import os
