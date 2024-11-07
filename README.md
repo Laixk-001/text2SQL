@@ -104,6 +104,6 @@ python3 merge_params.py --ori_model_dir "/root/autodl-fs/Qwen-1_8B-Chat/" --mode
 推理执行命令：
 ```shell
 cd predict
-python3 predict.py --model_path "your_model_path"
+python3 predict.py --model_path "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct_text2sql/"
 ```
 
