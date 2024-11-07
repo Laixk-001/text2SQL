@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
 
 import torch
-from qwen1_8.modeling_qwen import QWenLMHeadModel
-from qwen1_8.tokenization_qwen import QWenTokenizer
+from qwen2_5.modeling_qwen2 import Qwen2ForCausalLM
+from qwen2_5.tokenization_qwen2 import Qwen2Tokenizer
 import argparse
 from peft import PeftModel
 
@@ -23,8 +23,8 @@ def main():
     else:
         device = "cuda:{}".format(args.device)
     # 加载qwen原始模型
-    base_model = QWenLMHeadModel.from_pretrained(args.ori_model_dir, torch_dtype=torch.float16, device_map=device)
-    tokenizer = QWenTokenizer.from_pretrained(args.ori_model_dir)
+    base_model = Qwen2ForCausalLM.from_pretrained(args.ori_model_dir, torch_dtype=torch.float16, device_map=device)
+    tokenizer = Qwen2Tokenizer.from_pretrained(args.ori_model_dir)
     # 加载Lora外挂参数
     lora_model = PeftModel.from_pretrained(base_model, args.model_dir, torch_dtype=torch.float16)
     # 将外挂参数合并到原始参数中
