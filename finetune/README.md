@@ -28,5 +28,5 @@ CUDA_VISIBLE_DEVICES=0,1 deepspeed --master_port 5545 train.py --train_path /roo
 
 ## 模型融合
 ```shell
-python3 merge_params.py --ori_model_dir "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/" --model_dir "/root/autodl-fs/text2sql_output_qlora/epoch-3-step-4221" --save_model_dir "/root/auto-fs/Qwen2_5_Coder_7B_Instruct_text2sql/"
+python3 merge_params.py --ori_model_dir "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct/" --model_dir "/root/autodl-fs/text2sql_output_qlora/epoch-3-step-4221" --save_model_dir "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct_text2sql/"
 ```
