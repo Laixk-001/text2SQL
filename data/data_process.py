@@ -135,79 +135,6 @@ class DusqlDataSet:
                            "column_en": column_en, "table_en": table_en}
             new_schema.append(schema_info)
         return new_schema
-    
-def make_llm_data(home_path, file_name, save_name,tokenizer, sqlite_info_name="sqlite_info_zh.json"):
-    llm_data = []
-    with open(os.path.join(home_path, sqlite_info_name), "r", encoding="utf-8")as f:
-        sqlite_info = json.load(f)
-    with open(os.path.join(home_path, file_name), "r", encoding="utf-8")as f:
-        samples = json.load(f)
-        IGNORE_INDEX = tokenizer.pad_token_id
-        roles = {"user": "<|im_start|>user", "assistant": "<|im_start|>assistant"}
-        
-        im_start = tokenizer("<|im_start|>").input_ids[0]
-        im_end = tokenizer("<|im_end|>").input_ids[0]
-        nl_tokens = tokenizer('\n').input_ids
-        if len(nl_tokens) > 0:
-            nl_tokens = nl_tokens[-1:]
-        
-        _system = tokenizer('system').input_ids + nl_tokens
-        _user = tokenizer('user').input_ids + nl_tokens
-        _assistant = tokenizer('assistant').input_ids + nl_tokens
-        objs = []
-
-        for sample in tqdm(samples):
-            db_id = sample["db_id"]
-            question = sample["question"]
-            sql_query_zh = sample["query"]
-            sqlite_query = sqlite_info[db_id]["sqlite"]
-            # sqlite_query = sample["sql"]
-
-            input_id, target, test_input_ids = [], [], []
-            system_message = "You are a helpful assistant."
-            
-            system = [im_start] + _system + tokenizer(system_message).input_ids + [im_end] + nl_tokens
-            input_id += system
-            test_input_ids += system
-            target += [im_start] + [IGNORE_INDEX] * (len(system) - 3) + [im_end] + nl_tokens
-            assert len(input_id) == len(target), "Input and target lengths do not match."
-
-            input_role_user = '<|im_start|>user'
-            sentence_input_user = f'### Input:\nGenerate a SQL query that answers the question `{question}`.\nThis query will run on a database whose schema is represented in this string:\n{sqlite_query}'
-            # _input_id_user = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_user, add_special_tokens=False).input_ids + [im_end] + nl_tokens
-            _input_id_user = [im_start] + _user + tokenizer(sentence_input_user, add_special_tokens=False).input_ids + [im_end] + nl_tokens
-            input_id += _input_id_user
-            test_input_ids += _input_id_user
-
-            _target = [im_start] + [IGNORE_INDEX] * (len(_input_id_user) - 3) + [im_end] + nl_tokens
-            target += _target
-
-            input_role_assistant = '<|im_start|>assistant'
-            sentence_input_assistant_prompt = f'### Response:\nBased on your instructions, here is the SQL query I have generated to answer the question '
-            sentence_input_assistant_response = f"`{question}`:\n`{sql_query_zh}`"
-            sentence_input_assistant = sentence_input_assistant_prompt + sentence_input_assistant_response
-            # _input_id = tokenizer(input_role_user).input_ids + nl_tokens + tokenizer(sentence_input_assistant, add_special_tokens=False).input_ids + [im_end] + nl_tokens
-            _input_id_assistant = [im_start] + _assistant + tokenizer(sentence_input_assistant_prompt, add_special_tokens=False).input_ids + tokenizer(sentence_input_assistant_response, add_special_tokens=False).input_ids + [im_end] + nl_tokens
-            input_id += _input_id_assistant
-
-            # _target = [im_start] + [IGNORE_INDEX] * len(tokenizer(input_role_assistant).input_ids) + _input_id[len(tokenizer(input_role_assistant).input_ids) + 1:-2] + [im_end] + nl_tokens
-            _target = [im_start] + _assistant + tokenizer(sentence_input_assistant_prompt, add_special_tokens=False).input_ids + [IGNORE_INDEX] * len(tokenizer(sentence_input_assistant_response, add_special_tokens=False).input_ids) + [im_end] + nl_tokens
-
-            target += _target
-
-            test_input_ids += [im_start] + _assistant + tokenizer(sentence_input_assistant_prompt, add_special_tokens=False).input_ids + nl_tokens
-
-            objs.append(dict(
-                test_input_ids=test_input_ids,
-                input_ids=input_id,
-                label=target,
-            ))
-
-    # with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
-    #     json.dump(objs, fout,ensure_ascii=False)
-
-    with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
-        fout.writelines("\n".join([json.dumps(one, ensure_ascii=False) for one in objs]))
 
 def make_input_data(home_path, file_name, save_name,sqlite_info_name="sqlite_info_zh.json"):
     with open(os.path.join(home_path, sqlite_info_name), "r", encoding="utf-8")as f:
@@ -247,9 +174,6 @@ def make_input_data(home_path, file_name, save_name,sqlite_info_name="sqlite_inf
 
             objs.append(messages)
 
-    # with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
-    #     json.dump(objs, fout,ensure_ascii=False)
-
     with open(os.path.join(home_path, save_name),"w",encoding="utf-8")as fout:
         fout.writelines("\n".join([json.dumps(one, ensure_ascii=False) for one in objs]))
 
@@ -280,14 +204,15 @@ if __name__ == "__main__":
     home_path = "/root/autodl-fs/DuSQL/"
     translation_model_path = "/root/autodl-fs/opus-mt-zh-en"
     tokenizer_path = "/root/autodl-fs/Qwen2_5_Coder_7B_Instruct"
-    # data = DusqlDataSet(home_path, translation_model_path)
-    # new_schema = data.trans_schema()
-    # with open(os.path.join(home_path, "new_schema.jsonl"), "w", encoding = "utf-8")as f:
-    #     for n in new_schema:
-    #         f.write(json.dumps(n) + '\n')
-    # result = data.get_sqlite()
-    # with open(os.path.join(home_path, "sqlite_info_zh.json"), "w", encoding="utf-8") as f:
-    #     json.dump(result, f,ensure_ascii=False)
+
+    data = DusqlDataSet(home_path, translation_model_path)
+    new_schema = data.trans_schema()
+    with open(os.path.join(home_path, "new_schema.jsonl"), "w", encoding = "utf-8")as f:
+        for n in new_schema:
+            f.write(json.dumps(n) + '\n')
+    result = data.get_sqlite()
+    with open(os.path.join(home_path, "sqlite_info_zh.json"), "w", encoding="utf-8") as f:
+        json.dump(result, f,ensure_ascii=False)
     
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         tokenizer_path,
@@ -304,6 +229,3 @@ if __name__ == "__main__":
     tokenizer = setup_tokenizer(tokenizer)  # Set special tokens once
     make_input_data(home_path,"dev.json", "text2sql_dev_text_zh.json")
     make_input_data(home_path,"train.json", "text2sql_train_text_zh.json")
-        
-    # make_llm_data(home_path,"dev.json", "text2sql_dev_zh.json",tokenizer)
-    # make_llm_data(home_path,"train.json", "text2sql_train_zh.json",tokenizer)
