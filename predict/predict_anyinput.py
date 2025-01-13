@@ -10,7 +10,7 @@ class Service:
         #                                                   device_map='auto',
         #                                                   torch_dtype=torch.bfloat16).cuda()
         self.model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True,
-                                                            device_map='auto',load_in_4bit=True).cuda()
+                                                            device_map='auto',load_in_4bit=True)
     
     def predict(self, sql_info, query):
         """
