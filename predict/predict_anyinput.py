@@ -7,7 +7,7 @@ class Service:
     def __init__(self, model_path):
         self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
         self.model = AutoModelForCausalLM.from_pretrained(model_path, trust_remote_code=True,
-                                                          device_map='auto',
+                                                          device_map='auto',load_in_4bit=True,
                                                           torch_dtype=torch.bfloat16).cuda()
     
     def predict(self, sql_info, query):
